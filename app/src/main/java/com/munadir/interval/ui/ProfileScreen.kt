@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.munadir.interval.data.Milestones
 import com.munadir.interval.data.Prefs
 
 @Composable
@@ -32,11 +33,13 @@ fun ProfileScreen(
     isPro: Boolean,
     totalCards: Int,
     totalReviews: Int,
+    totalXp: Int,
     streak: Int,
     retention: Float?,
     onEditProfile: () -> Unit,
     onSettings: () -> Unit,
     onStats: () -> Unit,
+    onRewards: () -> Unit,
     onUpgrade: () -> Unit
 ) {
     Column(
@@ -134,6 +137,14 @@ fun ProfileScreen(
             Spacer(Modifier.height(16.dp))
         }
 
+        NavRow(
+            "Rewards",
+            Milestones.next(totalXp)
+                ?.let { "%,d XP to ${it.title}".format(it.xp - totalXp) }
+                ?: "Every milestone cleared",
+            onRewards
+        )
+        Spacer(Modifier.height(10.dp))
         NavRow("Your stats", "Streaks, retention and the heatmap", onStats)
         Spacer(Modifier.height(10.dp))
         NavRow("Settings", "Theme, reminders, AI key, purchases", onSettings)

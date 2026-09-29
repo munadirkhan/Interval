@@ -57,6 +57,7 @@ import com.munadir.interval.ui.OnboardingScreen
 import com.munadir.interval.ui.PaywallScreen
 import com.munadir.interval.ui.ProfileScreen
 import com.munadir.interval.ui.ReviewScreen
+import com.munadir.interval.ui.RewardsScreen
 import com.munadir.interval.ui.SessionCompleteScreen
 import com.munadir.interval.ui.SettingsScreen
 import com.munadir.interval.ui.StatsScreen
@@ -83,6 +84,7 @@ private sealed interface Route {
     data object Review : Route
     data class Complete(val got: Int, val missed: Int, val xp: Int) : Route
     data object Stats : Route
+    data object Rewards : Route
     data object Settings : Route
     data object Paywall : Route
 }
@@ -402,11 +404,13 @@ class MainActivity : ComponentActivity() {
                             isPro = isPro,
                             totalCards = cards.size,
                             totalReviews = events.size,
+                            totalXp = prefs.totalXp,
                             streak = CardStore.currentStreak(),
                             retention = CardStore.retention(),
                             onEditProfile = { route = Route.EditProfile },
                             onSettings = { route = Route.Settings },
                             onStats = { if (isPro) route = Route.Stats else openPaywall() },
+                            onRewards = { route = Route.Rewards },
                             onUpgrade = { openPaywall() }
                         )
                     }
@@ -537,11 +541,19 @@ class MainActivity : ComponentActivity() {
                 got = current.got,
                 missed = current.missed,
                 xpEarned = current.xp,
+                // prefs.totalXp already includes this session, so hand the delta over too.
+                milestone = com.munadir.interval.data.Milestones
+                    .crossedBy(prefs.totalXp, current.xp),
                 streak = CardStore.currentStreak(),
                 nextDueLabel = cards.minByOrNull { it.dueAt }
                     ?.let { dueLabel(it).removePrefix("Due ").lowercase() },
                 onDone = { route = Route.Main() },
                 onStats = { if (isPro) route = Route.Stats else openPaywall() }
+            )
+
+            Route.Rewards -> RewardsScreen(
+                totalXp = prefs.totalXp,
+                onBack = { route = Route.Main(Tab.YOU) }
             )
 
             Route.Stats -> StatsScreen(

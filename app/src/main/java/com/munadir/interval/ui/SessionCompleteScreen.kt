@@ -28,12 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.munadir.interval.data.Milestone
 
 @Composable
 fun SessionCompleteScreen(
     got: Int,
     missed: Int,
     xpEarned: Int,
+    milestone: Milestone?,
     streak: Int,
     nextDueLabel: String?,
     onDone: () -> Unit,
@@ -93,6 +95,35 @@ fun SessionCompleteScreen(
             StatTile("XP earned", "+$xpEarned", Modifier.weight(1f))
             StatTile("Streak", if (streak == 1) "1 day" else "$streak days", Modifier.weight(1f))
             StatTile("Missed", "$missed", Modifier.weight(1f))
+        }
+
+        if (milestone != null) {
+            Spacer(Modifier.height(12.dp))
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(MaterialTheme.colorScheme.primary)
+                    .padding(18.dp)
+            ) {
+                Text(
+                    "MILESTONE UNLOCKED",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    milestone.title,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    milestone.blurb,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.85f)
+                )
+            }
         }
 
         if (nextDueLabel != null) {
