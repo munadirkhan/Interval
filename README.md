@@ -2,13 +2,15 @@
 
 **Remember what you learn.**
 
+> **RevenueCat Shipaton 2026 — Next Gen Award submission.**
+> Built solo in three days by a first-time Kotlin developer.
+
 An Android study app built around spaced repetition. You capture something you want to
 remember — or describe a topic and let AI build the set — and Interval brings it back at
 widening intervals: tomorrow, three days, a week, a month, three months. Recall it and it moves
 further out. Miss it and it comes straight back.
 
-Built solo in three days for the [RevenueCat Shipaton 2026](https://revenuecat-shipaton-2026.devpost.com/)
-**Next Gen Award**.
+[View the hackathon on Devpost](https://revenuecat-shipaton-2026.devpost.com/)
 
 ---
 
