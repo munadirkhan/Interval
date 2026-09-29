@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Interval mark: a point, then rings at widening gaps.
+
+  It is the scheduler drawn literally — 1 day, 3, 7, 30 — and it survives being shrunk to a
+  status-bar glyph, which a lettermark would not. Everything sits inside the adaptive-icon
+  safe zone (the middle 72dp of the 108dp canvas), so no launcher mask can clip it.
+
+  This same drawable is the monochrome layer for themed icons, so the mark has to read as a
+  flat silhouette. Rings do.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- outermost ring: the 30-day rung, faintest -->
+    <path
+        android:pathData="M20,54 a34,34 0 1,0 68,0 a34,34 0 1,0 -68,0"
+        android:strokeColor="#FFB95C"
+        android:strokeWidth="2.5"
+        android:strokeAlpha="0.42"
+        android:fillColor="#00000000" />
+
+    <!-- middle ring: the 7-day rung -->
+    <path
+        android:pathData="M31,54 a23,23 0 1,0 46,0 a23,23 0 1,0 -46,0"
+        android:strokeColor="#FFB95C"
+        android:strokeWidth="2.9"
+        android:strokeAlpha="0.68"
+        android:fillColor="#00000000" />
+
+    <!-- inner ring: tomorrow -->
+    <path
+        android:pathData="M40.4,54 a13.6,13.6 0 1,0 27.2,0 a13.6,13.6 0 1,0 -27.2,0"
+        android:strokeColor="#FFB95C"
+        android:strokeWidth="3.2"
+        android:fillColor="#00000000" />
+
+    <!-- the thing you are trying to remember -->
+    <path
+        android:pathData="M47.2,54 a6.8,6.8 0 1,0 13.6,0 a6.8,6.8 0 1,0 -13.6,0"
+        android:fillColor="#FFB95C" />
+</vector>
