@@ -1,9 +1,9 @@
 # Interval
+*RevenueCat Shipaton 2026 — Next Gen Award submission.
 
 **Remember what you learn.**
 
-> **RevenueCat Shipaton 2026 — Next Gen Award submission.**
-> Built solo in three days by a first-time Kotlin developer.
+> Built in three days by a first-time Kotlin developers.
 
 An Android study app built around spaced repetition. You capture something you want to
 remember — or describe a topic and let AI build the set — and Interval brings it back at
