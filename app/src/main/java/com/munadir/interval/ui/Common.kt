@@ -1,25 +1,17 @@
 package com.munadir.interval.ui
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 
 /**
- * Clickable without the ripple.
+ * Clickable without a ripple, but not without feedback: the surface springs down under the
+ * finger instead. See [pressable].
  *
- * Used on surfaces that already respond visually -- a card that scales, a send button that
- * changes colour -- where a second ripple on top reads as noise.
+ * Kept as the name every screen already calls so the whole app picked up the new behaviour in
+ * one place rather than a hundred edits.
  */
-fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier = composed {
-    clickable(
-        interactionSource = remember { MutableInteractionSource() },
-        indication = null,
-        onClick = onClick
-    )
-}
+fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier = pressable(onClick = onClick)
 
 /** Formats a millisecond timestamp as "March 2026", for profile "member since" lines. */
 @Composable

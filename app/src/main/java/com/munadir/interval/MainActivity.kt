@@ -17,6 +17,8 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -305,7 +307,23 @@ class MainActivity : ComponentActivity() {
             route = Route.Main()
         }
 
-        when (val current = route) {
+        // Screens fade and lift into place rather than cutting. Tabs are excluded from the
+        // vertical motion -- they already crossfade internally, and sliding the whole shell
+        // when you tap a tab reads as a bug.
+        AnimatedContent(
+            targetState = route,
+            transitionSpec = {
+                val lateral = initialState is Route.Main && targetState is Route.Main
+                if (lateral) {
+                    fadeIn(tween(160)) togetherWith fadeOut(tween(120))
+                } else {
+                    (fadeIn(tween(240)) + slideInVertically { it / 16 }) togetherWith
+                        (fadeOut(tween(130)) + slideOutVertically { -it / 30 })
+                }
+            },
+            label = "route"
+        ) { current ->
+        when (current) {
 
             Route.Welcome -> WelcomeScreen(
                 initialAvatar = AVATARS.first(),
@@ -664,6 +682,7 @@ class MainActivity : ComponentActivity() {
                 },
                 onClose = { route = Route.Main() }
             )
+        }
         }
     }
 }

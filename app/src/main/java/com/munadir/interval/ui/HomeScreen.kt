@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -212,7 +213,16 @@ private fun DueHero(due: Int, total: Int, onReview: () -> Unit) {
         Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(28.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            // A flat fill reads as a coloured box. A diagonal gradient reads as a surface
+            // with light falling across it, which is most of the difference.
+            .background(
+                Brush.linearGradient(
+                    listOf(
+                        MaterialTheme.colorScheme.primaryContainer,
+                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.72f)
+                    )
+                )
+            )
             .padding(24.dp)
     ) {
         Text(

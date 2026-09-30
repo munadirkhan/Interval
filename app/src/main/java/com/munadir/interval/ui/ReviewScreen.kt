@@ -409,9 +409,11 @@ private fun FlipCard(
     onFlip: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // A spring here matters more than anywhere else in the app: this is the gesture people
+    // repeat hundreds of times, and a tween makes it feel like a slideshow.
     val angle by animateFloatAsState(
         targetValue = if (flipped) 180f else 0f,
-        animationSpec = tween(460),
+        animationSpec = Motion.gentle,
         label = "flip"
     )
     val density = LocalDensity.current.density

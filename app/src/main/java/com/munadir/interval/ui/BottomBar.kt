@@ -81,11 +81,19 @@ private fun TabButton(
     val active = MaterialTheme.colorScheme.primary
     val idle = MaterialTheme.colorScheme.onSurfaceVariant
     val tint by animateColorAsState(if (selected) active else idle, tween(200), label = "tint")
-    val lift by animateFloatAsState(if (selected) 1.08f else 1f, tween(200), label = "lift")
+    val lift by animateFloatAsState(if (selected) 1.10f else 1f, Motion.bouncy, label = "lift")
+
+    val pill by animateFloatAsState(
+        targetValue = if (selected) 1f else 0f,
+        animationSpec = Motion.snappy,
+        label = "pill"
+    )
 
     Column(
         Modifier
             .clip(RoundedCornerShape(16.dp))
+            // The selected tab sits on a tinted pill that fades in rather than appearing.
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.10f * pill))
             .clickableNoRipple(onClick)
             .padding(horizontal = 16.dp, vertical = 6.dp),
         horizontalAlignment = Alignment.CenterHorizontally
