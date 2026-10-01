@@ -183,6 +183,7 @@ class MainActivity : ComponentActivity() {
             )
         }
         var reviewQueue by remember { mutableStateOf(emptyList<Card>()) }
+        var paywallReturn: Route by remember { mutableStateOf(Route.Main()) }
 
         // ---- billing
         var offering by remember { mutableStateOf<Offering?>(null) }
@@ -246,7 +247,10 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        fun openPaywall() {
+        fun openPaywall(returnTo: Route = Route.Main()) {
+            // Where to land after buying or dismissing. Defaults to the shell, but the
+            // generate flow needs to come back to its own drafts.
+            paywallReturn = returnTo
             route = Route.Paywall
             purchaseError = null
             if (offering == null) {
@@ -414,7 +418,7 @@ class MainActivity : ComponentActivity() {
                                 onBack = { route = Route.Main(Tab.TODAY) }
                             )
                         } else {
-                            LaunchedEffect(Unit) { openPaywall() }
+                            LaunchedEffect(Unit) { openPaywall(Route.Main(Tab.TODAY)) }
                         }
 
                         Tab.YOU -> ProfileScreen(
@@ -490,7 +494,8 @@ class MainActivity : ComponentActivity() {
                     val room = if (isPro) accepted.size
                     else (Config.FREE_CARD_LIMIT - cards.size).coerceAtLeast(0)
 
-                    accepted.take(room).forEach {
+                    val saved = accepted.take(room)
+                    saved.forEach {
                         CardStore.add(
                             front = it.front,
                             back = it.back,
@@ -502,16 +507,16 @@ class MainActivity : ComponentActivity() {
                     Scheduler.scheduleNext(this@MainActivity)
 
                     if (accepted.size > room) {
-                        // Save what fits, then ask for the rest. Better than refusing the batch.
-                        drafts.clear()
-                        genInput = ""
-                        attachment = null
-                        openPaywall()
+                        // Save what fits and ask for the rest — but keep the leftovers and the
+                        // prompt. Clearing them here meant you paid for unlimited cards and the
+                        // cards you were buying it for had already been thrown away.
+                        drafts.removeAll(saved)
+                        openPaywall(Route.Generate)
                     } else {
                         drafts.clear()
                         genInput = ""
                         attachment = null
-                        toast(if (accepted.size == 1) "1 card added" else "${accepted.size} cards added")
+                        toast(if (saved.size == 1) "1 card added" else "${saved.size} cards added")
                         route = Route.Main()
                     }
                 },
@@ -671,16 +676,16 @@ class MainActivity : ComponentActivity() {
                         val failure = Billing.purchase(this@MainActivity, pkg)
                         purchasing = false
                         purchaseError = failure
-                        if (failure == null && Billing.isPro.value) route = Route.Main()
+                        if (failure == null && Billing.isPro.value) route = paywallReturn
                     }
                 },
                 onRestore = {
                     scope.launch {
                         purchaseError = Billing.restore()
-                        if (Billing.isPro.value) route = Route.Main()
+                        if (Billing.isPro.value) route = paywallReturn
                     }
                 },
-                onClose = { route = Route.Main() }
+                onClose = { route = paywallReturn }
             )
         }
         }
