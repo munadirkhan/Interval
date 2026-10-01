@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Interval" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+      The window behind Compose, which is what you see during cold start before the first
+      frame is drawn. The template's Light parent meant the app flashed white and then snapped
+      to paper black — the most visible rough edge in the app, because it is the first thing
+      anyone ever sees.
+
+      On Android 12+ these same attributes drive the system splash screen, so the launch icon
+      now sits on the app's own background instead of a white card.
+    -->
+    <style name="Theme.Interval" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/ink_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">
+            @color/ink_background
+        </item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">
+            @drawable/ic_launcher_foreground
+        </item>
+    </style>
 </resources>

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -438,12 +439,35 @@ private fun FlipCard(
             contentAlignment = Alignment.Center
         ) {
             if (showingBack) {
-                Text(
-                    back,
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                // The question stays on screen, small and dimmed above the answer. Dropping it
+                // entirely meant you could no longer see what you had just been asked — and it
+                // left a short answer floating in an empty card.
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        front,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(Modifier.height(18.dp))
+                    Box(
+                        Modifier
+                            .width(44.dp)
+                            .height(2.dp)
+                            .clip(RoundedCornerShape(1.dp))
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
+                    )
+                    Spacer(Modifier.height(18.dp))
+                    Text(
+                        back,
+                        style = MaterialTheme.typography.headlineSmall,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             } else {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
